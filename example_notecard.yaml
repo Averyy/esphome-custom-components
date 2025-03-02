@@ -79,7 +79,7 @@ notecard:
     uart_id: uart_notecard
     project_id: your-project.devices
     sync_interval: 6h
-    org: "Your Organization Name"
+    org: "Your Organization"
 
 # Deep sleep configuration
 deep_sleep:
