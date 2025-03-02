@@ -8,9 +8,11 @@ This repository contains custom components for [ESPHome](https://esphome.io/), a
 - [Notecard](#notecard) - Blues Wireless Notecard IoT modules
 - [VL53L1X](#vl53l1x) - Time-of-Flight distance sensor
 
-## HLK-LD2413
+## HLK LD2413
 
 A high-precision liquid level detection sensor using 24GHz millimeter wave radar technology with a detection range of 0.15m to 10.5m and accuracy of ±3mm under optimal conditions.
+
+This UART component provides support for this advanced mmWave distance sensing product. I developed it specifically for measuring water levels in an underground cistern where traditional ultrasonic sensors struggled with winter temperature variations, darkness, and humidity. The mmWave technology offers superior reliability in challenging environments.
 
 ### Installation
 
@@ -25,11 +27,13 @@ external_components:
 - [Documentation](components/hlk_ld2413/README.md)
 - [Datasheet](components/hlk_ld2413/datasheet.txt)
 - [Example Configuration](example_hlk_ld2413.yaml)
-- [Purchase: AliExpress Option 1](https://www.aliexpress.com/item/1005006766564668.html) / [AliExpress Option 2](https://www.aliexpress.com/item/1005008479449270.html)
+- Purchase: [AliExpress Option 1](https://www.aliexpress.com/item/1005006766564668.html) / [AliExpress Option 2](https://www.aliexpress.com/item/1005008479449270.html)
 
-## Notecard
+## Blues Notecard
 
 Integration with Blues Wireless Notecard (both cellular and WiFi variants) for IoT connectivity. Features include configurable data collection and sync intervals, automatic data batching, and access to Notecard temperature and battery voltage.
+
+This UART component was developed to transmit magnetic dial gauge readings from a propane tank in a location without WiFi access. The implementation focuses specifically on using the Notecard for data transmission to Notehub, while the ESP32 handles sleep cycles and data filtering for optimal power efficiency.
 
 ### Installation
 
@@ -49,7 +53,7 @@ external_components:
 
 Integration with the VL53L1X/VL53L4CD Time-of-Flight (ToF) distance sensor. Supports both VL53L1X and VL53L4CD sensors with configurable distance modes and range status reporting.
 
-Note this component was forked from an open source repo where updates caused it to break for me, so I copied it to make my own stable version.
+This I2C component was forked from an existing open source repository after updates caused compatibility issues with my setup. I created this stable version primarily for water level monitoring applications, though I discovered that lens condensation in humid environments could affect reading stability - an important consideration for similar implementations.
 
 ### Installation
 
