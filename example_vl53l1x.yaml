@@ -1,0 +1,59 @@
+esphome:
+  name: tof-sensor
+  friendly_name: ToF Sensor
+  on_boot:
+    then:
+      - output.turn_on: xshut_pin
+      - delay: 1s # Allow VL53L1X to boot (min 1.2ms required)
+  on_shutdown:
+    then:
+      - output.turn_off: xshut_pin
+
+esp32:
+  board: esp32dev
+
+external_components:
+  - source: components
+
+logger:
+  level: DEBUG
+
+output:
+  - platform: gpio
+    pin: GPIO23
+    id: xshut_pin
+
+i2c:
+  - id: bus_a
+    sda: GPIO21
+    scl: GPIO22
+    scan: true
+    timeout: 50ms
+
+vl53l1x:
+  distance_mode: long
+  update_interval: 0.5s
+
+sensor:
+  - platform: vl53l1x
+    i2c_id: bus_a
+    distance:
+      name: "VL53L1X ToF Distance Sensor"
+      id: water_sensor
+      entity_category: "diagnostic"
+      filters:
+        - lambda: |-
+            static auto start_time = millis();
+            if (millis() - start_time < 120000) { // 2 minutes
+              return {}; // Return empty to skip this reading
+            }
+            // After 2 minutes, apply your existing filters
+            if (x < 45 || x > 4200 || x == 0.0 || std::isnan(x)) {
+              return 0;
+            }
+            return x;
+        - quantile:
+            window_size: 11
+            send_every: 11
+            send_first_at: 11
+            quantile: 0.5

@@ -1,0 +1,88 @@
+esphome:
+  name: radial-hall-effect-sensor
+  friendly_name: Radial Hall Effect Sensor
+  on_boot:
+    then:
+      - output.turn_on: sensor_pin
+      - delay: 0.5s # Allow sensor to boot
+  on_shutdown:
+    then:
+      - output.turn_off: sensor_pin
+
+esp32:
+  board: esp32dev
+
+external_components:
+  - source: components
+
+logger:
+  level: DEBUG
+
+uart:
+  id: uart_notecard
+  tx_pin: GPIO17
+  rx_pin: GPIO16
+  baud_rate: 9600
+
+i2c:
+  sda: GPIO21
+  scl: GPIO22
+  scan: true
+
+output:
+  - platform: gpio
+    pin: GPIO2
+    id: sensor_pin
+
+as5600:
+  # direction: counterclockwise # if DIR Soldered directly to 3.3V (for counterclockwise) then this is not needed. For normal clockwise it should be soldered to GND.
+  # dir_pin: GPIO4
+  id: my_as5600
+  power_mode: low3
+
+sensor:
+  - platform: as5600
+    as5600_id: my_as5600
+    name: "Angle"
+    update_interval: 1s
+    id: position
+    filters:
+      - lambda: "return x * 360.0 / 4096.0;"
+      - sliding_window_moving_average:
+          window_size: 5
+          send_every: 5
+          send_first_at: 5
+    on_value:
+      then:
+        - lambda: |-
+            // Get values from Notecard
+            float temperature = id(notecard_component).get_notecard_temperature();
+            float battery_voltage = id(notecard_component).get_notecard_battery_voltage();
+
+            // Create JSON with all values
+            std::string json = "{";
+            json += "\"angle\":" + to_string(x);
+            json += ",\"temperature\":" + to_string(temperature);
+            json += ",\"batteryVoltage\":" + to_string(battery_voltage);
+            json += "}";
+
+            ESP_LOGD("main", "Raw json: %s", json.c_str());
+
+            bool success = id(notecard_component).send_data(json);
+            ESP_LOGD("main", "Data send %s, going to sleep in 1s...", success ? "successful" : "failed");
+            delay(1000);  // Give time for Notecard communication to complete
+        - deep_sleep.enter: deep_sleep_mode
+
+# Notecard configuration
+notecard:
+  id: notecard_component
+  uart_id: uart_notecard
+  project_id: avewire.devices
+  sync_interval: 6h
+  org: "Avewire"
+
+# Deep sleep configuration
+deep_sleep:
+  id: deep_sleep_mode
+  run_duration: 5min #this will cause the device to goto sleep if something stalls or fails
+  sleep_duration: 2h
