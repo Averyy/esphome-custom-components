@@ -50,7 +50,23 @@ sensor:
 
 ## Installation
 
-This component is not included in the standard ESPHome distribution. To use it:
+There are two ways to install this component:
+
+### Option 1: Direct from GitHub (Recommended)
+
+Add the following to your ESPHome configuration:
+
+```yaml
+external_components:
+  - source: github://Averyy/esphome-custom-components
+    components: [hlk_ld2413]
+```
+
+**Note:** Using the GitHub repository version means you'll automatically get updates, but it could change at any moment. If stability is critical for your project, consider using the local installation method.
+
+### Option 2: Local Installation
+
+If you prefer a more stable setup or need to modify the component:
 
 1. Create a `components` directory in your ESPHome configuration directory
 2. Copy the `hlk_ld2413` directory into the `components` directory
