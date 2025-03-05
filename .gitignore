@@ -1,3 +1,15 @@
+# Gitignore settings for ESPHome
+
+# ESPHome specific
+.esphome/
+.pio/
+.pioenvs/
+.piolibdeps/
+
+# Secrets
+secrets.yaml
+/secrets.yaml
+
 # Python cache files
 __pycache__/
 *.py[cod]
@@ -19,12 +31,6 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
-
-# ESPHome specific
-.esphome/
-.pio/
-.pioenvs/
-.piolibdeps/
 
 # IDE files
 .idea/
