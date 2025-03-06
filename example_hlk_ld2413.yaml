@@ -1,28 +1,28 @@
 esphome:
-  name: radar-water-sensor
-  friendly_name: Radar Water Sensor
+    name: radar-water-sensor
+    friendly_name: Radar Water Sensor
 
 esp32:
-  board: esp32dev
+    board: esp32dev
 
 external_components:
-  - source: components
+    - source: components
 
 logger:
-  level: DEBUG
+    level: DEBUG
 
 uart:
-  id: uart_bus
-  tx_pin: GPIO17 # green
-  rx_pin: GPIO16 # blue
-  baud_rate: 115200
+    id: uart_bus
+    tx_pin: GPIO17 # green
+    rx_pin: GPIO16 # blue
+    baud_rate: 115200
 
 sensor:
-  - platform: hlk_ld2413
-    uart_id: uart_bus
-    name: "Water Level"
-    update_interval: 2.5s
-    # Optional configurations with defaults matching datasheet
-    min_distance: 150mm # Valid range: 150-10500mm
-    max_distance: 3000mm # Valid range: 150-10500mm
-    report_cycle: 160ms # Valid range: 50-1000ms
+    - platform: hlk_ld2413
+      uart_id: uart_bus
+      name: "Water Level"
+      update_interval: 2.4s
+      # Optional configurations with defaults matching datasheet
+      min_distance: 250mm # Valid range: 250-10500mm
+      max_distance: 3000mm # Valid range: 150-10500mm
+      report_cycle: 160ms # Valid range: 50-1000ms

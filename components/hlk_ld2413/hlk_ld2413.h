@@ -125,7 +125,7 @@ namespace esphome
       }
 
     protected:
-      static const uint16_t DEFAULT_MIN_DISTANCE = 150;   // mm
+      static const uint16_t DEFAULT_MIN_DISTANCE = 250;   // mm
       static const uint16_t DEFAULT_MAX_DISTANCE = 10000; // mm
       static const uint16_t DEFAULT_REPORT_CYCLE = 160;   // ms
 

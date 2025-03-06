@@ -17,7 +17,7 @@ CONF_MAX_DISTANCE = "max_distance"
 CONF_REPORT_CYCLE = "report_cycle"
 
 # Validation constants from datasheet
-MIN_VALID_DISTANCE = 150  # mm
+MIN_VALID_DISTANCE = 250  # mm
 MAX_VALID_DISTANCE = 10500  # mm
 MIN_REPORT_CYCLE = 50  # ms
 MAX_REPORT_CYCLE = 1000  # ms

@@ -4,13 +4,13 @@ This repository contains custom components for [ESPHome](https://esphome.io/), a
 
 ## Available Components
 
-- [HLK-LD2413](#hlk-ld2413) - 24GHz mmWave radar liquid level detection sensor
-- [Notecard](#notecard) - Blues Wireless Notecard IoT modules
-- [VL53L1X](#vl53l1x) - Time-of-Flight distance sensor
+-   [HLK-LD2413](#hlk-ld2413) - 24GHz mmWave radar liquid level detection sensor
+-   [Notecard](#notecard) - Blues Wireless Notecard IoT modules
+-   [VL53L1X](#vl53l1x) - Time-of-Flight distance sensor
 
 ## HLK LD2413
 
-A high-precision liquid level detection sensor using 24GHz millimeter wave radar technology with a detection range of 0.15m to 10.5m and accuracy of ±3mm under optimal conditions.
+A high-precision liquid level detection sensor using 24GHz millimeter wave radar technology with a detection range of 0.25m to 10.5m and accuracy of ±3mm under optimal conditions. Note that the datasheet says 150mm minimum range, but in reality its 250mm so that's what my component restricts to.
 
 This UART component provides support for this advanced mmWave distance sensing product. I developed it specifically for measuring water levels in an underground cistern where traditional ultrasonic sensors struggled with winter temperature variations, darkness, and humidity. The mmWave technology offers superior reliability in challenging environments.
 
@@ -18,16 +18,16 @@ This UART component provides support for this advanced mmWave distance sensing p
 
 ```yaml
 external_components:
-  - source: github://Averyy/esphome-custom-components
-    components: [hlk_ld2413]
+    - source: github://Averyy/esphome-custom-components
+      components: [hlk_ld2413]
 ```
 
 **Resources:**
 
-- [Documentation](components/hlk_ld2413/README.md)
-- [Datasheet](components/hlk_ld2413/datasheet.txt)
-- [Example Configuration](example_hlk_ld2413.yaml)
-- Purchase: [AliExpress Option 1](https://www.aliexpress.com/item/1005006766564668.html) / [AliExpress Option 2](https://www.aliexpress.com/item/1005008479449270.html)
+-   [Documentation](components/hlk_ld2413/README.md)
+-   [Datasheet](components/hlk_ld2413/datasheet.txt)
+-   [Example Configuration](example_hlk_ld2413.yaml)
+-   Purchase: [AliExpress Option 1](https://www.aliexpress.com/item/1005006766564668.html) / [AliExpress Option 2](https://www.aliexpress.com/item/1005008479449270.html)
 
 ## Blues Notecard
 
@@ -39,15 +39,15 @@ This UART component was developed to transmit magnetic dial gauge readings from 
 
 ```yaml
 external_components:
-  - source: github://Averyy/esphome-custom-components
-    components: [notecard]
+    - source: github://Averyy/esphome-custom-components
+      components: [notecard]
 ```
 
 **Resources:**
 
-- [Documentation](components/notecard/README.md)
-- [Example Configuration](example_notecard.yaml)
-- [Purchase: Blues Shop](https://shop.blues.com/collections/notecard)
+-   [Documentation](components/notecard/README.md)
+-   [Example Configuration](example_notecard.yaml)
+-   [Purchase: Blues Shop](https://shop.blues.com/collections/notecard)
 
 ## VL53L1X
 
@@ -59,22 +59,22 @@ This I2C component was forked from an existing open source repository after upda
 
 ```yaml
 external_components:
-  - source: github://Averyy/esphome-custom-components
-    components: [vl53l1x]
+    - source: github://Averyy/esphome-custom-components
+      components: [vl53l1x]
 ```
 
 **Resources:**
 
-- [Documentation](components/vl53l1x/README.md)
-- [Example Configuration](example_vl53l1x.yaml)
+-   [Documentation](components/vl53l1x/README.md)
+-   [Example Configuration](example_vl53l1x.yaml)
 
 ## General Information
 
 ### Features
 
-- **Easy Integration**: Simple YAML configuration for complex sensors
-- **Fully Documented**: Comprehensive documentation for each component
-- **Example Configurations**: Ready-to-use example files for quick setup
+-   **Easy Integration**: Simple YAML configuration for complex sensors
+-   **Fully Documented**: Comprehensive documentation for each component
+-   **Example Configurations**: Ready-to-use example files for quick setup
 
 ### Note on Installation
 

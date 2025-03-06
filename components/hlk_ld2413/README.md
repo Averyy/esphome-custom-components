@@ -4,48 +4,48 @@ This component provides integration with the HLK-LD2413 24GHz millimeter wave ra
 
 ## Features
 
-- High-precision liquid level detection using 24GHz millimeter wave radar
-- Detection range: 0.15m to 10.5m
-- Accuracy: ±3mm under optimal conditions
-- UART communication at 115200 baud
-- Configurable detection range and reporting cycle
-- Real-time distance measurements
+-   High-precision liquid level detection using 24GHz millimeter wave radar
+-   Detection range: 0.25m to 10.5m (datasheet says 150mm minimum, but in reality it doesn't report distances under 250mm)
+-   Accuracy: ±3mm under optimal conditions
+-   UART communication at 115200 baud
+-   Configurable detection range and reporting cycle
+-   Real-time distance measurements
 
 ## Hardware Setup
 
 Connect your HLK-LD2413 sensor to your ESP32 using the following pins:
 
-- HLK-LD2413 TX (OT1) → ESP32 RX (GPIO16 in example)
-- HLK-LD2413 RX (RX) → ESP32 TX (GPIO17 in example)
-- HLK-LD2413 GND → ESP32 GND
-- HLK-LD2413 3V3 → ESP32 3.3V
+-   HLK-LD2413 TX (OT1) → ESP32 RX (GPIO16 in example)
+-   HLK-LD2413 RX (RX) → ESP32 TX (GPIO17 in example)
+-   HLK-LD2413 GND → ESP32 GND
+-   HLK-LD2413 3V3 → ESP32 3.3V
 
 ## Configuration Variables
 
-- **uart_id** (_Required_, ID): The ID of the UART bus
-- **min_distance** (_Optional_, distance, default: 150mm): Minimum detection distance (valid range: 150mm to 10500mm)
-- **max_distance** (_Optional_, distance, default: 10500mm): Maximum detection distance (valid range: 150mm to 10500mm)
-- **report_cycle** (_Optional_, time, default: 160ms): Sensor reporting cycle (valid range: 50ms to 1000ms)
-- **update_interval** (_Required_, time): How often to poll the sensor and publish state updates. Related to report_cycle, if at a 160ms report_cycle the sensor provides a new distance back every 2.4s
+-   **uart_id** (_Required_, ID): The ID of the UART bus
+-   **min_distance** (_Optional_, distance, default: 250mm): Minimum detection distance (valid range: 250mm to 10500mm)
+-   **max_distance** (_Optional_, distance, default: 10500mm): Maximum detection distance (valid range: 250mm to 10500mm and has to be greater than min_distance)
+-   **report_cycle** (_Optional_, time, default: 160ms): Sensor reporting cycle (valid range: 50ms to 1000ms)
+-   **update_interval** (_Required_, time): How often to poll the sensor and publish state updates. Related to report_cycle, if at a 160ms report_cycle the sensor provides a new distance back every 2.4s
 
 ## Basic Configuration
 
 ```yaml
 uart:
-  id: uart_bus
-  tx_pin: GPIO17
-  rx_pin: GPIO16
-  baud_rate: 115200
+    id: uart_bus
+    tx_pin: GPIO17
+    rx_pin: GPIO16
+    baud_rate: 115200
 
 sensor:
-  - platform: hlk_ld2413
-    uart_id: uart_bus
-    name: "Water Level"
-    update_interval: 2.5s
-    # Optional configurations below
-    min_distance: 150mm
-    max_distance: 3000mm
-    report_cycle: 160ms
+    - platform: hlk_ld2413
+      uart_id: uart_bus
+      name: "Water Level"
+      update_interval: 2.5s
+      # Optional configurations below
+      min_distance: 150mm
+      max_distance: 3000mm
+      report_cycle: 160ms
 ```
 
 ## Installation
@@ -58,8 +58,8 @@ Add the following to your ESPHome configuration:
 
 ```yaml
 external_components:
-  - source: github://Averyy/esphome-custom-components
-    components: [hlk_ld2413]
+    - source: github://Averyy/esphome-custom-components
+      components: [hlk_ld2413]
 ```
 
 **Note:** Using the GitHub repository version means you'll automatically get updates, but it could change at any moment. If stability is critical for your project, consider using the local installation method.
@@ -74,29 +74,29 @@ If you prefer a more stable setup or need to modify the component:
 
 ```yaml
 external_components:
-  - source: components
+    - source: components
 ```
 
 ## Mounting Recommendations
 
 For optimal performance:
 
-- Mount the sensor perpendicular to the liquid surface
-- Avoid installation above feed inlets
-- Maintain a minimum safe distance of 1/5 of the maximum detection distance from walls
-- Avoid obstructions within the ±12° beam range
+-   Mount the sensor perpendicular to the liquid surface
+-   Avoid installation above feed inlets
+-   Maintain a minimum safe distance of 1/5 of the maximum detection distance from walls
+-   Avoid obstructions within the ±12° beam range
 
 ## Power Consumption
 
 The sensor's power consumption varies based on the reporting cycle:
 
-- 50ms: ~40mA
-- 160ms (default): ~23mA
-- 1000ms: ~16mA
+-   50ms: ~40mA
+-   160ms (default): ~23mA
+-   1000ms: ~16mA
 
 ## Notes
 
-- The sensor uses FMCW (Frequency-Modulated Continuous Wave) radar technology
-- The beam width is ±12° at -6dB (two-way)
-- The component automatically handles the sensor's communication protocol
-- For best accuracy, ensure the sensor is securely mounted to prevent false readings
+-   The sensor uses FMCW (Frequency-Modulated Continuous Wave) radar technology
+-   The beam width is ±12° at -6dB (two-way)
+-   The component automatically handles the sensor's communication protocol
+-   For best accuracy, ensure the sensor is securely mounted to prevent false readings

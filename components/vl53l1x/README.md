@@ -24,13 +24,13 @@ Connect your VL53L1X/VL53L4CD sensor to your ESP32/ESP8266 using the following p
 ## Configuration Variables
 
 -   **distance_mode** (_Optional_, string, default: "long"): The distance mode of the sensor. Options are "short" or "long". Note that VL53L4CD sensors only support "short" mode and will be automatically configured as such.
--   **update_interval** (_Optional_, time, default: 60s): How often to update the sensor readings.
+-   **update_interval** (_Optional_, time, default: 0.5s): How often to update the sensor readings.
 -   **i2c_id** (_Optional_, ID): The ID of the I2C bus if you have multiple I2C buses.
 
 ## Sensor Outputs
 
 -   **distance**: Distance measurement in millimeters
--   **range_status**: Status of the range measurement (0 = valid, 1-4 = various error states)
+-   **range_status**: Status of the range measurement (0 = valid, 1-4 = various error states), but I personally haven't gotten these to show up or be helpful
 
 ## Basic Configuration
 
