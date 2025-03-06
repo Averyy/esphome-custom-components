@@ -10,7 +10,7 @@ This repository contains custom components for [ESPHome](https://esphome.io/), a
 
 ## HLK LD2413
 
-A high-precision liquid level detection sensor using 24GHz millimeter wave radar technology with a detection range of 0.25m to 10.5m and accuracy of ±3mm under optimal conditions. Note that the datasheet says 150mm minimum range, but in reality its 250mm so that's what my component restricts to.
+A high-precision liquid level detection sensor using 24GHz millimeter wave radar technology with a detection range of 0.25m to 10.5m and accuracy of ±3mm under optimal conditions. Note that the datasheet says 150mm minimum range, but in reality it's 250mm.
 
 This UART component provides support for this advanced mmWave distance sensing product. I developed it specifically for measuring water levels in an underground cistern where traditional ultrasonic sensors struggled with winter temperature variations, darkness, and humidity. The mmWave technology offers superior reliability in challenging environments.
 

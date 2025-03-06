@@ -21,7 +21,7 @@ sensor:
     - platform: hlk_ld2413
       uart_id: uart_bus
       name: "Water Level"
-      update_interval: 2.4s
+      update_interval: 2.4s # approx 15x the report cycle value
       # Optional configurations with defaults matching datasheet
       min_distance: 250mm # Valid range: 250-10500mm
       max_distance: 3000mm # Valid range: 150-10500mm

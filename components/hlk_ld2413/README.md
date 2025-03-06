@@ -25,8 +25,8 @@ Connect your HLK-LD2413 sensor to your ESP32 using the following pins:
 -   **uart_id** (_Required_, ID): The ID of the UART bus
 -   **min_distance** (_Optional_, distance, default: 250mm): Minimum detection distance (valid range: 250mm to 10500mm)
 -   **max_distance** (_Optional_, distance, default: 10500mm): Maximum detection distance (valid range: 250mm to 10500mm and has to be greater than min_distance)
--   **report_cycle** (_Optional_, time, default: 160ms): Sensor reporting cycle (valid range: 50ms to 1000ms)
--   **update_interval** (_Required_, time): How often to poll the sensor and publish state updates. Related to report_cycle, if at a 160ms report_cycle the sensor provides a new distance back every 2.4s
+-   **report_cycle** (_Optional_, time, default: 160ms): Sensor reporting cycle (valid range: 50ms to 1000ms). Higher values use less power
+-   **update_interval** (_Required_, time): How often to poll the sensor and publish state updates. Set it to approximately 15x the report_cycle value, ie at 160ms report_cycle, the sensor provides a new value every 2.4s
 
 ## Basic Configuration
 
@@ -41,9 +41,9 @@ sensor:
     - platform: hlk_ld2413
       uart_id: uart_bus
       name: "Water Level"
-      update_interval: 2.5s
+      update_interval: 2.4s
       # Optional configurations below
-      min_distance: 150mm
+      min_distance: 250mm
       max_distance: 3000mm
       report_cycle: 160ms
 ```
