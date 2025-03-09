@@ -10,9 +10,11 @@ This repository contains custom components for [ESPHome](https://esphome.io/), a
 
 ## HLK LD2413
 
-A high-precision liquid level detection sensor using 24GHz millimeter wave radar technology with a detection range of 0.25m to 10.5m and accuracy of ±3mm under optimal conditions. Note that the datasheet says 150mm minimum range, but in reality it's 250mm.
+A high-precision liquid level detection sensor using 24GHz millimeter wave radar technology with a detection range of 0.25m to 10.5m and accuracy of ±3mm under optimal conditions. Note that the datasheet says 150mm minimum range, but in reality it's 250mm (under that and it provides nothing back).
 
 This UART component provides support for this advanced mmWave distance sensing product. I developed it specifically for measuring water levels in an underground cistern where traditional ultrasonic sensors struggled with winter temperature variations, darkness, and humidity. The mmWave technology offers superior reliability in challenging environments.
+
+Note that LD2413 is very picky about surroundings and reflections. Enclosures or electronics too close to it can cause it to not provide any readings (or provide inaccurate ones). Always test it solo first to help narrow down any issues.
 
 ### Installation
 
@@ -49,7 +51,7 @@ external_components:
 -   [Example Configuration](example_notecard.yaml)
 -   [Purchase: Blues Shop](https://shop.blues.com/collections/notecard)
 
-## VL53L1X
+## TOF400C VL53L1X
 
 Integration with the VL53L1X/VL53L4CD Time-of-Flight (ToF) distance sensor. Supports both VL53L1X and VL53L4CD sensors with configurable distance modes and range status reporting.
 
