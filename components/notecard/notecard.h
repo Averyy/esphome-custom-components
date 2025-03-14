@@ -21,6 +21,7 @@ namespace esphome
 
 			bool send_data(const std::string &data);
 			bool initialize();
+			bool sync_now();
 
 			// Helper methods to get specific values from the Notecard
 			float get_notecard_temperature();

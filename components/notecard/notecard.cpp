@@ -372,6 +372,28 @@ namespace esphome
 			return true;
 		}
 
+		bool Notecard::sync_now()
+		{
+			if (!initialized_)
+			{
+				ESP_LOGE(TAG, "Notecard not initialized, cannot trigger sync");
+				return false;
+			}
+
+			ESP_LOGD(TAG, "Triggering immediate sync with hub.sync");
+
+			std::string command = "{\"req\":\"hub.sync\"}";
+
+			if (!send_command_(command))
+			{
+				ESP_LOGE(TAG, "Failed to trigger sync with Notecard");
+				return false;
+			}
+
+			ESP_LOGD(TAG, "Sync triggered successfully");
+			return true;
+		}
+
 		void Notecard::flush_rx_()
 		{
 			// Completely clear the buffer with short delays

@@ -68,9 +68,18 @@ sensor:
 
                     ESP_LOGD("main", "Raw json: %s", json.c_str());
 
+                    // Send data to Notecard
                     bool success = id(notecard_component).send_data(json);
-                    ESP_LOGD("main", "Data send %s, going to sleep in 1s...", success ? "successful" : "failed");
-                    delay(1000);  // Give time for Notecard communication to complete
+                    ESP_LOGD("main", "Data send %s", success ? "successful" : "failed");
+
+                    // Optional: Trigger immediate sync with the Notehub
+                    // If you don't force sync_now, Notecard will sync automatically based on its interval
+                    bool sync_success = id(notecard_component).sync_now();
+                    ESP_LOGD("main", "Sync trigger %s", sync_success ? "successful" : "failed");
+
+                    // Give time for Notecard communication to complete
+                    delay(1500);  // Increased delay to allow sync to process
+                    ESP_LOGD("main", "Going to sleep...");
               - deep_sleep.enter: deep_sleep_mode
 
 # Notecard configuration

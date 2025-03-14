@@ -24,7 +24,7 @@ Connect your Notecard to your ESP32 using the following pins (assuming the Notec
 
 -   **uart_id** (_Required_, ID): The ID of the UART bus
 -   **project_id** (_Required_, string): Your Notehub project ID
--   **sync_interval** (_Optional_, time, default: 4h): How often to sync batched sensor data to Notehub. Will also set the inbound interval to the same value to conserve battery life.
+-   **sync_interval** (_Optional_, time, default: 4h): How often to sync batched sensor data to Notehub. Will also set the inbound interval and location update frequency to the same value to conserve battery life. If you use a manual sync set this to a higher value.
 -   **org** (_Optional_, string): Sets the organization name for WiFi AP (only used for WiFi Notecards)
 
 ## Basic Configuration
@@ -121,6 +121,41 @@ sensor:
                     // Send data to Notecard
                     id(notecard_component).send_data(json);
 ```
+
+## Manual Sync Triggering
+
+The component provides a `sync_now()` method that allows you to manually trigger a sync with Notehub without waiting for the scheduled sync interval. This is especially useful for battery-powered devices that wake up infrequently.
+
+```yaml
+sensor:
+    - platform: adc
+      pin: GPIO33
+      name: "Hall Effect Raw Voltage"
+      update_interval: 2s
+      id: hall_voltage
+      on_value:
+          then:
+              - lambda: |-
+                    // Create JSON with sensor data
+                    std::string json = "{";
+                    json += "\"sensorVoltage\":" + to_string(x);
+                    json += "}";
+
+                    // Send data to Notecard
+                    id(notecard_component).send_data(json);
+
+                    // Trigger immediate sync with Notehub
+                    id(notecard_component).sync_now();
+
+                    // Give time for sync to process
+                    delay(1500);
+```
+
+When using the `sync_now()` method:
+
+-   Always check if it returns true to confirm the sync was triggered successfully
+-   Add a short delay (1-2 seconds) after calling it to give the Notecard time to process the sync request
+-   This is particularly useful in deep sleep applications where you want to ensure data is sent to Notehub before the device goes to sleep
 
 ## Notes
 
