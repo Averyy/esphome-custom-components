@@ -1,13 +1,6 @@
 esphome:
     name: radial-hall-effect-sensor
     friendly_name: Radial Hall Effect Sensor
-    on_boot:
-        then:
-            - output.turn_on: sensor_pin
-            - delay: 0.5s # Allow sensor to boot
-    on_shutdown:
-        then:
-            - output.turn_off: sensor_pin
 
 esp32:
     board: esp32dev
@@ -28,11 +21,6 @@ i2c:
     sda: GPIO21
     scl: GPIO22
     scan: true
-
-output:
-    - platform: gpio
-      pin: GPIO2
-      id: sensor_pin
 
 as5600:
     # direction: counterclockwise # if DIR Soldered directly to 3.3V (for counterclockwise) then this is not needed. For normal clockwise it should be soldered to GND.
@@ -73,22 +61,21 @@ sensor:
                     ESP_LOGD("main", "Data send %s", success ? "successful" : "failed");
 
                     // Optional: Trigger immediate sync with the Notehub
-                    // If you don't force sync_now, Notecard will sync automatically based on its interval
                     bool sync_success = id(notecard_component).sync_now();
                     ESP_LOGD("main", "Sync trigger %s", sync_success ? "successful" : "failed");
 
                     // Give time for Notecard communication to complete
-                    delay(1500);  // Increased delay to allow sync to process
+                    delay(2000);
                     ESP_LOGD("main", "Going to sleep...");
               - deep_sleep.enter: deep_sleep_mode
 
-# Notecard configuration
+# Notecard configuration sample
 notecard:
     id: notecard_component
     uart_id: uart_notecard
-    project_id: your-project.devices
-    sync_interval: 6h
+    project_id: "your-project.devices"
     org: "Your Organization"
+    sync_interval: 6h
 
 # Deep sleep configuration
 deep_sleep:

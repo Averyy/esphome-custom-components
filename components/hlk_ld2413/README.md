@@ -13,12 +13,13 @@ This component provides integration with the HLK-LD2413 24GHz millimeter wave ra
 
 ## Hardware Setup
 
-Connect your HLK-LD2413 sensor to your ESP32 using the following pins:
+Connect your HLK-LD2413 sensor to your ESP32 using the following pins (with the antenna of the HLK facing you ie pins on the left side, left to right):
 
--   HLK-LD2413 TX (OT1) → ESP32 RX (GPIO16 in example)
--   HLK-LD2413 RX (RX) → ESP32 TX (GPIO17 in example)
--   HLK-LD2413 GND → ESP32 GND
--   HLK-LD2413 3V3 → ESP32 3.3V
+-   HLK-LD2413 Pin1 3V3 → ESP32 3.3V
+-   HLK-LD2413 Pin2 GND → ESP32 GND
+-   HLK-LD2413 Pin3 TX (OT1) → ESP32 RX (GPIO16 in example)
+-   HLK-LD2413 Pin4 RX (RX) → ESP32 TX (GPIO17 in example)
+-   HLK-LD2413 Pin5 IO (OT2) → Not used
 
 ## Configuration Variables
 

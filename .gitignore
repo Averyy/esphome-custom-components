@@ -5,6 +5,7 @@
 .pio/
 .pioenvs/
 .piolibdeps/
+/firmware
 
 # Secrets
 secrets.yaml
