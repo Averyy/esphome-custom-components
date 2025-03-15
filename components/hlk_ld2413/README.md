@@ -10,6 +10,7 @@ This component provides integration with the HLK-LD2413 24GHz millimeter wave ra
 -   UART communication at 115200 baud
 -   Configurable detection range and reporting cycle
 -   Real-time distance measurements
+-   Sensor configuration and calibration mode (disabled by default)
 
 ## Hardware Setup
 
@@ -27,6 +28,7 @@ Connect your HLK-LD2413 sensor to your ESP32 using the following pins (with the 
 -   **min_distance** (_Optional_, distance, default: 250mm): Minimum detection distance (valid range: 250mm to 10500mm)
 -   **max_distance** (_Optional_, distance, default: 10500mm): Maximum detection distance (valid range: 250mm to 10500mm and has to be greater than min_distance)
 -   **report_cycle** (_Optional_, time, default: 160ms): Sensor reporting cycle (valid range: 50ms to 1000ms). Higher values use less power
+-   **calibrate_on_boot** (_Optional_, boolean, default: false): Whether to perform threshold calibration during boot. Enable this after installation or if the sensor environment changes.
 -   **update_interval** (_Required_, time): How often to poll the sensor and publish state updates. Set it to approximately 15x the report_cycle value, ie at 160ms report_cycle, the sensor provides a new value every 2.4s
 
 ## Basic Configuration
@@ -47,6 +49,7 @@ sensor:
       min_distance: 250mm
       max_distance: 3000mm
       report_cycle: 160ms
+      calibrate_on_boot: false # Set to true after installation or when environment changes
 ```
 
 ## Installation
@@ -87,6 +90,56 @@ For optimal performance:
 -   Maintain a minimum safe distance of 1/5 of the maximum detection distance from walls
 -   Avoid obstructions within the ±12° beam range
 
+## Calibration
+
+The HLK-LD2413 sensor requires threshold calibration for optimal performance:
+
+-   **Initial Installation**: Set `calibrate_on_boot: true` for the first boot after installation
+-   **Environment Changes**: Recalibrate if the sensor housing or surrounding environment changes
+-   **Normal Operation**: After successful calibration, set `calibrate_on_boot: false` to avoid unnecessary calibrations
+
+Calibration helps the sensor establish a baseline for background noise and improves measurement accuracy.
+
+### Calibration Process
+
+The calibration process:
+
+1. Sends a calibration command to the sensor
+2. Waits for a valid acknowledgment response
+3. Automatically retries up to 3 times if no valid response is received
+4. Reports success only when a valid acknowledgment is received
+
+### Troubleshooting Calibration Issues
+
+If calibration fails:
+
+-   Check the UART wiring connections
+-   Ensure the sensor has stable power (3.3V)
+-   Try power cycling the sensor
+-   Increase distance from potential interference sources
+-   Check the logs for specific error messages
+-   The component will automatically retry calibration once if the first attempt fails
+
+### Calibration Timing
+
+Calibration is a critical step that requires proper timing:
+
+-   The sensor needs time to process the calibration command
+-   The component now waits longer (500ms) for a response
+-   Multiple retries are performed with delays between attempts
+-   The entire calibration process may take up to 2 seconds
+
+## Configuration Process
+
+During boot, the component will:
+
+1. Enter configuration mode
+2. Configure the minimum and maximum detection distances
+3. Set the reporting cycle
+4. Perform threshold calibration (if `calibrate_on_boot` is enabled)
+5. Exit configuration mode
+6. Begin normal measurement operations
+
 ## Power Consumption
 
 The sensor's power consumption varies based on the reporting cycle:
@@ -101,3 +154,4 @@ The sensor's power consumption varies based on the reporting cycle:
 -   The beam width is ±12° at -6dB (two-way)
 -   The component automatically handles the sensor's communication protocol
 -   For best accuracy, ensure the sensor is securely mounted to prevent false readings
+-   After changing any configuration parameters, the sensor will be automatically reconfigured on boot

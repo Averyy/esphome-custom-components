@@ -70,11 +70,19 @@ sensor:
               - deep_sleep.enter: deep_sleep_mode
 
 # Notecard configuration sample
+# notecard:
+#     id: notecard_component
+#     uart_id: uart_notecard
+#     project_id: "your-project.devices"
+#     org: "Your Organization"
+#     sync_interval: 6h
+
+# Notecard configuration real (remove before committing)
 notecard:
     id: notecard_component
     uart_id: uart_notecard
-    project_id: "your-project.devices"
-    org: "Your Organization"
+    project_id: "avewire.devices"
+    org: "Avewire"
     sync_interval: 6h
 
 # Deep sleep configuration

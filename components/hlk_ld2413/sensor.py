@@ -15,6 +15,7 @@ AUTO_LOAD = ['sensor']
 CONF_MIN_DISTANCE = "min_distance"
 CONF_MAX_DISTANCE = "max_distance"
 CONF_REPORT_CYCLE = "report_cycle"
+CONF_CALIBRATE_ON_BOOT = "calibrate_on_boot"
 
 # Validation constants from datasheet
 MIN_VALID_DISTANCE = 250  # mm
@@ -58,6 +59,7 @@ CONFIG_SCHEMA = cv.All(
         cv.Optional(CONF_MIN_DISTANCE, default=f"{MIN_VALID_DISTANCE}mm"): cv.distance,
         cv.Optional(CONF_MAX_DISTANCE, default=f"{MAX_VALID_DISTANCE}mm"): cv.distance,
         cv.Optional(CONF_REPORT_CYCLE, default=f"160ms"): cv.positive_time_period_milliseconds,
+        cv.Optional(CONF_CALIBRATE_ON_BOOT, default=False): cv.boolean,
     }).extend(UART_SCHEMA),
     validate_config
 )
@@ -82,3 +84,6 @@ async def to_code(config):
         # Extract milliseconds from TimePeriodMilliseconds object
         report_cycle_ms = int(config[CONF_REPORT_CYCLE].total_milliseconds)
         cg.add(var.set_report_cycle(report_cycle_ms))
+        
+    if CONF_CALIBRATE_ON_BOOT in config:
+        cg.add(var.set_calibrate_on_boot(config[CONF_CALIBRATE_ON_BOOT]))

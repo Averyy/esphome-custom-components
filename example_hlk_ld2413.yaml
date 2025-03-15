@@ -9,20 +9,25 @@ external_components:
     - source: components
 
 logger:
-    level: DEBUG
+    level: DEBUG # Use DEBUG for normal operation, VERBOSE for troubleshooting
 
+# UART configuration is critical for this component
 uart:
     id: uart_bus
-    tx_pin: GPIO17 # green
-    rx_pin: GPIO16 # blue
+    tx_pin: GPIO17 # Connect to sensor RX
+    rx_pin: GPIO16 # Connect to sensor TX
     baud_rate: 115200
 
+# Distance sensor for water level
 sensor:
     - platform: hlk_ld2413
       uart_id: uart_bus
       name: "Water Level"
-      update_interval: 2.4s # approx 15x the report cycle value
+      unit_of_measurement: "mm"
+      accuracy_decimals: 1
+      update_interval: 1s # Default 2.4s, approx 15x the report cycle value
       # Optional configurations with defaults matching datasheet
-      min_distance: 250mm # Valid range: 250-10500mm
-      max_distance: 3000mm # Valid range: 150-10500mm
-      report_cycle: 160ms # Valid range: 50-1000ms
+      min_distance: 250mm # Default 250mm, Valid range: 250-10500mm
+      max_distance: 2500mm # Default 10000mmValid range: 250-10500mm
+      report_cycle: 65ms # Default 160ms, Valid range: 50-1000ms
+      calibrate_on_boot: true # Default false, performs threshold calibration during setup
