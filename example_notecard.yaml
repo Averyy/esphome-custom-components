@@ -23,8 +23,8 @@ i2c:
     scan: true
 
 as5600:
-    # direction: counterclockwise # if DIR Soldered directly to 3.3V (for counterclockwise) then this is not needed. For normal clockwise it should be soldered to GND.
-    # dir_pin: GPIO4
+    direction: counterclockwise # if DIR Soldered directly to 3.3V (for counterclockwise) then this is not needed. For normal clockwise it should be soldered to GND.
+    dir_pin: GPIO4
     id: my_as5600
     power_mode: low3
 
@@ -36,10 +36,10 @@ sensor:
       id: position
       filters:
           - lambda: "return x * 360.0 / 4096.0;"
-          - sliding_window_moving_average:
-                window_size: 5
-                send_every: 5
-                send_first_at: 5
+          - median:
+                window_size: 10
+                send_every: 10
+                send_first_at: 10
       on_value:
           then:
               - lambda: |-
@@ -65,8 +65,8 @@ sensor:
                     ESP_LOGD("main", "Sync trigger %s", sync_success ? "successful" : "failed");
 
                     // Give time for Notecard communication to complete
+                    ESP_LOGD("main", "Going to sleep in 2s...");
                     delay(2000);
-                    ESP_LOGD("main", "Going to sleep...");
               - deep_sleep.enter: deep_sleep_mode
 
 # Notecard configuration sample
@@ -77,16 +77,16 @@ sensor:
 #     org: "Your Organization"
 #     sync_interval: 6h
 
-# Notecard configuration real (remove before committing)
+# Notecard configuration real (using secrets)
 notecard:
     id: notecard_component
     uart_id: uart_notecard
-    project_id: "avewire.devices"
-    org: "Avewire"
-    sync_interval: 6h
+    project_id: !secret notecard_project_id
+    sync_interval: 48h #high because of manual sync trigger
+    org: !secret notecard_org
 
 # Deep sleep configuration
 deep_sleep:
     id: deep_sleep_mode
     run_duration: 5min #this will cause the device to goto sleep if something stalls or fails
-    sleep_duration: 2h
+    sleep_duration: 8h

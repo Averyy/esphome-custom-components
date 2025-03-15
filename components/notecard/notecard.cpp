@@ -107,12 +107,12 @@ namespace esphome
 			std::string response;
 			bool success = false;
 
-			// Try up to 3 times to get hub configuration
-			for (int retry = 0; retry < 3 && !success; retry++)
+			// Try up to 5 times to get hub configuration (increased from 3)
+			for (int retry = 0; retry < 5 && !success; retry++)
 			{
 				if (retry > 0)
 				{
-					ESP_LOGD(TAG, "Retrying hub.get (attempt %d/3)...", retry + 1);
+					ESP_LOGD(TAG, "Retrying hub.get (attempt %d/5)...", retry + 1);
 					delay(100 * retry); // Increasing delay between retries
 				}
 
@@ -525,7 +525,25 @@ namespace esphome
 		float Notecard::get_notecard_temperature()
 		{
 			std::string response;
-			bool success = send_command_and_get_response_("{\"req\":\"card.temp\"}", response);
+			bool success = false;
+
+			// Try up to 5 times to get temperature
+			for (int retry = 0; retry < 5 && !success; retry++)
+			{
+				if (retry > 0)
+				{
+					ESP_LOGD(TAG, "Retrying card.temp (attempt %d/5)...", retry + 1);
+					delay(100 * retry); // Increasing delay between retries
+				}
+
+				success = send_command_and_get_response_("{\"req\":\"card.temp\"}", response);
+
+				if (success)
+				{
+					break;
+				}
+			}
+
 			if (success)
 			{
 				std::string value = extract_json_value(response, "value");
@@ -552,7 +570,25 @@ namespace esphome
 		float Notecard::get_notecard_battery_voltage()
 		{
 			std::string response;
-			bool success = send_command_and_get_response_("{\"req\":\"card.voltage\"}", response);
+			bool success = false;
+
+			// Try up to 5 times to get battery voltage
+			for (int retry = 0; retry < 5 && !success; retry++)
+			{
+				if (retry > 0)
+				{
+					ESP_LOGD(TAG, "Retrying card.voltage (attempt %d/5)...", retry + 1);
+					delay(100 * retry); // Increasing delay between retries
+				}
+
+				success = send_command_and_get_response_("{\"req\":\"card.voltage\"}", response);
+
+				if (success)
+				{
+					break;
+				}
+			}
+
 			if (success)
 			{
 				std::string value = extract_json_value(response, "value");
