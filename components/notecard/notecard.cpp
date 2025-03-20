@@ -202,6 +202,13 @@ namespace esphome
 
 		bool Notecard::check_and_configure_location_()
 		{
+			// Skip location configuration entirely for WiFi Notecards
+			if (is_wifi_notecard_)
+			{
+				ESP_LOGD(TAG, "Skipping location configuration for WiFi Notecard");
+				return true;
+			}
+
 			ESP_LOGD(TAG, "Checking location tracking configuration...");
 
 			// Get current location tracking settings
