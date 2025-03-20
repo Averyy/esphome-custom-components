@@ -84,8 +84,15 @@ namespace esphome
 				return false;
 			}
 
-			// Step 2: Configure location tracking
-			if (!check_and_configure_location_())
+			// Check if this is a WiFi Notecard
+			std::string version_response;
+			if (send_command_and_get_response_("{\"req\":\"card.version\"}", version_response))
+			{
+				is_wifi_notecard_ = (version_response.find("\"wifi\":true") != std::string::npos);
+			}
+
+			// Step 2: Configure location tracking (skip for WiFi Notecards)
+			if (!is_wifi_notecard_ && !check_and_configure_location_())
 			{
 				return false;
 			}
@@ -252,16 +259,8 @@ namespace esphome
 		{
 			ESP_LOGD(TAG, "Checking if Notecard supports WiFi...");
 
-			// First check if this Notecard supports WiFi by checking card.version
-			std::string version_response;
-			if (!send_command_and_get_response_("{\"req\":\"card.version\"}", version_response))
-			{
-				ESP_LOGE(TAG, "Failed to get Notecard version");
-				return false;
-			}
-
-			// Check if this is a WiFi-capable Notecard (should contain "wifi":true in response)
-			if (version_response.find("\"wifi\":true") == std::string::npos)
+			// Use stored WiFi capability status
+			if (!is_wifi_notecard_)
 			{
 				ESP_LOGD(TAG, "This Notecard does not support WiFi, skipping WiFi configuration");
 				return true; // Return success, WiFi config not needed

@@ -32,6 +32,7 @@ namespace esphome
 			std::string org_;
 			uint32_t sync_interval_{14400}; // 4 hours default
 			bool initialized_{false};
+			bool is_wifi_notecard_{false};
 			uint32_t last_response_time_{0};
 
 			void flush_rx_();
