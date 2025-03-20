@@ -84,16 +84,17 @@ namespace esphome
 				return false;
 			}
 
-			// Step 2: Configure location tracking
-			if (!check_and_configure_location_())
+			// Step 2: Configure WiFi (if applicable)
+			if (!check_and_configure_wifi_())
 			{
 				return false;
 			}
 
-			// Step 3: Configure WiFi (if applicable)
-			if (!check_and_configure_wifi_())
+			// Step 3: Try to configure location tracking, but don't fail if it's not supported
+			if (!check_and_configure_location_())
 			{
-				return false;
+				ESP_LOGD(TAG, "Location tracking not configured - this is possible for WiFi-only Notecards on older firmware versions");
+				// Continue anyway - location tracking is not critical
 			}
 
 			return true;
@@ -103,30 +104,11 @@ namespace esphome
 		{
 			ESP_LOGD(TAG, "Checking hub configuration...");
 
-			// Get current hub settings - with retry logic
+			// Get current hub settings
 			std::string response;
-			bool success = false;
-
-			// Try up to 5 times to get hub configuration (increased from 3)
-			for (int retry = 0; retry < 5 && !success; retry++)
+			if (!send_command_and_get_response_("{\"req\":\"hub.get\"}", response))
 			{
-				if (retry > 0)
-				{
-					ESP_LOGD(TAG, "Retrying hub.get (attempt %d/5)...", retry + 1);
-					delay(100 * retry); // Increasing delay between retries
-				}
-
-				success = send_command_and_get_response_("{\"req\":\"hub.get\"}", response);
-
-				if (success)
-				{
-					break;
-				}
-			}
-
-			if (!success)
-			{
-				ESP_LOGE(TAG, "Failed to get hub configuration after multiple attempts");
+				ESP_LOGE(TAG, "Failed to get hub configuration");
 				return false;
 			}
 
@@ -298,7 +280,7 @@ namespace esphome
 
 			// Set a custom name for the SoftAP with MAC address suffix
 			std::string wifi_name = sanitize_wifi_name_(org_);
-			wifi_config += ",\"name\":\"" + wifi_name + "-\"";
+			wifi_config += ",\"name\":\"" + wifi_name + "\"";
 
 			// If no SSID is configured, enable SoftAP mode
 			if (!has_ssid)
@@ -342,11 +324,8 @@ namespace esphome
 				}
 			}
 
-			// Ensure name ends with dash
-			if (!result.empty() && result.back() != '-')
-			{
-				result += '-';
-			}
+			// We're not adding the dash here anymore since it will be added where the name is used
+			// This allows more flexibility in how the name is used
 
 			return result;
 		}
@@ -416,6 +395,32 @@ namespace esphome
 		}
 
 		bool Notecard::send_command_and_get_response_(const std::string &command, std::string &response_out)
+		{
+			// Implement retry logic for all commands
+			static const int MAX_RETRIES = 5;
+			bool success = false;
+
+			for (int retry = 0; retry < MAX_RETRIES && !success; retry++)
+			{
+				if (retry > 0)
+				{
+					ESP_LOGD(TAG, "Retrying command (attempt %d/%d): %s", retry + 1, MAX_RETRIES, command.c_str());
+					delay(100 * retry); // Increasing delay between retries
+				}
+
+				success = send_command_once_(command, response_out);
+
+				if (success)
+				{
+					break;
+				}
+			}
+
+			return success;
+		}
+
+		// Private method to send a command once without retries
+		bool Notecard::send_command_once_(const std::string &command, std::string &response_out)
 		{
 			ESP_LOGD(TAG, "Sending command: %s", command.c_str());
 
@@ -525,26 +530,7 @@ namespace esphome
 		float Notecard::get_notecard_temperature()
 		{
 			std::string response;
-			bool success = false;
-
-			// Try up to 5 times to get temperature
-			for (int retry = 0; retry < 5 && !success; retry++)
-			{
-				if (retry > 0)
-				{
-					ESP_LOGD(TAG, "Retrying card.temp (attempt %d/5)...", retry + 1);
-					delay(100 * retry); // Increasing delay between retries
-				}
-
-				success = send_command_and_get_response_("{\"req\":\"card.temp\"}", response);
-
-				if (success)
-				{
-					break;
-				}
-			}
-
-			if (success)
+			if (send_command_and_get_response_("{\"req\":\"card.temp\"}", response))
 			{
 				std::string value = extract_json_value(response, "value");
 				if (!value.empty())
@@ -570,26 +556,7 @@ namespace esphome
 		float Notecard::get_notecard_battery_voltage()
 		{
 			std::string response;
-			bool success = false;
-
-			// Try up to 5 times to get battery voltage
-			for (int retry = 0; retry < 5 && !success; retry++)
-			{
-				if (retry > 0)
-				{
-					ESP_LOGD(TAG, "Retrying card.voltage (attempt %d/5)...", retry + 1);
-					delay(100 * retry); // Increasing delay between retries
-				}
-
-				success = send_command_and_get_response_("{\"req\":\"card.voltage\"}", response);
-
-				if (success)
-				{
-					break;
-				}
-			}
-
-			if (success)
+			if (send_command_and_get_response_("{\"req\":\"card.voltage\"}", response))
 			{
 				std::string value = extract_json_value(response, "value");
 				if (!value.empty())

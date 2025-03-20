@@ -37,6 +37,7 @@ namespace esphome
 			void flush_rx_();
 			bool send_command_(const std::string &command);
 			bool send_command_and_get_response_(const std::string &command, std::string &response_out);
+			bool send_command_once_(const std::string &command, std::string &response_out);
 			bool wait_for_response_();
 			std::string get_response_();
 			bool check_and_configure_hub_();
