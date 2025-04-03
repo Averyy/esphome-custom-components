@@ -43,15 +43,21 @@ sensor:
       on_value:
           then:
               - lambda: |-
-                    // Get values from Notecard
+                    // Get temp and battery voltage from Notecard, returns 0 if not available
                     float temperature = id(notecard_component).get_notecard_temperature();
                     float battery_voltage = id(notecard_component).get_notecard_battery_voltage();
 
                     // Create JSON with all values
                     std::string json = "{";
                     json += "\"angle\":" + to_string(x);
-                    json += ",\"temperature\":" + to_string(temperature);
-                    json += ",\"batteryVoltage\":" + to_string(battery_voltage);
+                    // Only include temperature if it's a non-zero value
+                    if (temperature != 0.0) {
+                        json += ",\"temperature\":" + to_string(temperature);
+                    }
+                    // Only include battery voltage if it's a non-zero value
+                    if (battery_voltage != 0.0) {
+                        json += ",\"batteryVoltage\":" + to_string(battery_voltage);
+                    }
                     json += "}";
 
                     ESP_LOGD("main", "Raw json: %s", json.c_str());

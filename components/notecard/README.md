@@ -1,6 +1,6 @@
 # Notecard Component for ESPHome
 
-This component provides integration with Blues Wireless Notecard (both cellular and WiFi variants) for ESPHome using UART. This is a custom component created by me - use at your own risk. If you use or modify this component, please link back to the original repository.
+This component provides integration with Blues Wireless Notecard (both cellular and WiFi variants) for ESPHome using UART. This is a custom component and still has breaking changes  as it's being tested. If you use or modify this component, please link back to the original repository.
 
 ## Features
 
@@ -25,7 +25,7 @@ Connect your Notecard to your ESP32 using the following pins (assuming the Notec
 -   **uart_id** (_Required_, ID): The ID of the UART bus
 -   **project_id** (_Required_, string): Your Notehub project ID
 -   **sync_interval** (_Optional_, time, default: 4h): How often to sync batched sensor data to Notehub. Will also set the inbound interval and location update frequency to the same value to conserve battery life. If you use a manual sync set this to a higher value.
--   **org** (_Optional_, string): Sets the organization name for WiFi AP (only used for WiFi Notecards)
+-   **org** (_Optional_, string): Sets the organization name for the WiFi AP (only needed if Notecard supports WiFi)
 
 ## Basic Configuration
 

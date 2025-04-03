@@ -5,7 +5,7 @@ This repository contains custom components for [ESPHome](https://esphome.io/), a
 ## Available Components
 
 -   [HLK-LD2413](#hlk-ld2413) - 24GHz mmWave radar liquid level detection sensor
--   [Notecard](#notecard) - Blues Wireless Notecard IoT modules
+-   [Notecard](#notecard) - Blues Wireless Notecard IoT communication modules
 -   [VL53L1X](#vl53l1x) - Time-of-Flight distance sensor
 
 ## HLK LD2413
@@ -33,7 +33,7 @@ external_components:
 
 ## Blues Notecard
 
-Integration with Blues Wireless Notecard (both cellular and WiFi variants) for IoT connectivity. Features include configurable data collection and sync intervals, automatic data batching, and access to Notecard temperature and battery voltage.
+Integration with Blues Wireless Notecard (both cellular and WiFi support) for IoT connectivity. Features include configurable data collection and sync intervals, automatic data batching, and access to Notecard temperature and battery voltage sensors.
 
 This UART component was developed to transmit magnetic dial gauge readings from a propane tank in a location without WiFi access. The implementation focuses specifically on using the Notecard for data transmission to Notehub, while the ESP32 handles sleep cycles and data filtering for optimal power efficiency.
 

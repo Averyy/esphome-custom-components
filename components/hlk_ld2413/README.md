@@ -1,6 +1,6 @@
 # HLK-LD2413 Component for ESPHome
 
-This component provides integration with the HLK-LD2413 24GHz millimeter wave radar liquid level detection sensor for ESPHome using UART. This is a custom component created by me - use at your own risk. If you use or modify this component, please link back to the original repository.
+This component provides integration with the HLK-LD2413 24GHz millimeter wave radar liquid level detection sensor for ESPHome using UART. This is a custom component and still has breaking changes as it's being tested. If you use or modify this component, please link back to the original repository.
 
 ## Features
 
@@ -89,6 +89,7 @@ For optimal performance:
 -   Avoid installation above feed inlets
 -   Maintain a minimum safe distance of 1/5 of the maximum detection distance from walls
 -   Avoid obstructions within the ±12° beam range
+-   It can scan through a couple mm of plastic, but seems to perform better with an open space behind it
 
 ## Calibration
 
