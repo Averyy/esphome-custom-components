@@ -16,7 +16,7 @@ external_components:
     - source: components
 
 logger:
-    level: VERBOSE # Use DEBUG for normal operation, VERBOSE for troubleshooting
+    level: DEBUG # Use DEBUG for normal operation, VERBOSE for troubleshooting
 
 output:
     - platform: gpio
@@ -43,3 +43,11 @@ sensor:
       max_distance: 2500mm # Default 10500mm, Valid range: 150-10500mm
       report_cycle: 160ms # Default 160ms, Valid range: 50-1000ms
       calibrate_on_boot: true # Default false, performs threshold calibration during setup
+      filters:
+          # Ignore the first 5
+          - skip_initial: 10
+      on_value:
+          - lambda: |-
+                // Received value
+                float sensor_value = x;  // Store the filtered value
+                ESP_LOGD("main", "Received filtered value of %.2f mm", sensor_value);
