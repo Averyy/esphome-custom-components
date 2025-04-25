@@ -18,7 +18,7 @@ CONF_REPORT_CYCLE = "report_cycle"
 CONF_CALIBRATE_ON_BOOT = "calibrate_on_boot"
 
 # Validation constants from datasheet
-MIN_VALID_DISTANCE = 250  # mm
+MIN_VALID_DISTANCE = 150  # mm
 MAX_VALID_DISTANCE = 10500  # mm
 MIN_REPORT_CYCLE = 50  # ms
 MAX_REPORT_CYCLE = 1000  # ms
@@ -27,8 +27,26 @@ hlk_ld2413_ns = cg.esphome_ns.namespace('hlk_ld2413')
 HLKLD2413Sensor = hlk_ld2413_ns.class_('HLKLD2413Sensor', sensor.Sensor, cg.PollingComponent)
 
 def validate_config(config):
+    # Validate min_distance is less than max_distance
     if config[CONF_MIN_DISTANCE] >= config[CONF_MAX_DISTANCE]:
         raise cv.Invalid("min_distance must be less than max_distance")
+    
+    # Enforce minimum and maximum distance limits from datasheet
+    min_distance_mm = int(config[CONF_MIN_DISTANCE] * 1000)  # Convert from meters to millimeters
+    if min_distance_mm < MIN_VALID_DISTANCE:
+        raise cv.Invalid(f"min_distance must be at least {MIN_VALID_DISTANCE}mm (got {min_distance_mm}mm)")
+    
+    max_distance_mm = int(config[CONF_MAX_DISTANCE] * 1000)  # Convert from meters to millimeters
+    if max_distance_mm > MAX_VALID_DISTANCE:
+        raise cv.Invalid(f"max_distance must be at most {MAX_VALID_DISTANCE}mm (got {max_distance_mm}mm)")
+    
+    # Validate report cycle is within range
+    report_cycle_ms = int(config[CONF_REPORT_CYCLE].total_milliseconds)
+    if report_cycle_ms < MIN_REPORT_CYCLE:
+        raise cv.Invalid(f"report_cycle must be at least {MIN_REPORT_CYCLE}ms (got {report_cycle_ms}ms)")
+    if report_cycle_ms > MAX_REPORT_CYCLE:
+        raise cv.Invalid(f"report_cycle must be at most {MAX_REPORT_CYCLE}ms (got {report_cycle_ms}ms)")
+    
     return config
 
 # Create a modified UART schema that only requires baud_rate

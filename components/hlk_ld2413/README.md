@@ -5,7 +5,7 @@ This component provides integration with the HLK-LD2413 24GHz millimeter wave ra
 ## Features
 
 -   High-precision liquid level detection using 24GHz millimeter wave radar
--   Detection range: 0.25m to 10.5m (datasheet says 150mm minimum, but in reality it doesn't report distances under 250mm)
+-   Detection range: 0.15m to 10.5m
 -   Accuracy: ±3mm under optimal conditions
 -   UART communication at 115200 baud
 -   Configurable detection range and reporting cycle
@@ -25,8 +25,8 @@ Connect your HLK-LD2413 sensor to your ESP32 using the following pins (with the 
 ## Configuration Variables
 
 -   **uart_id** (_Required_, ID): The ID of the UART bus
--   **min_distance** (_Optional_, distance, default: 250mm): Minimum detection distance (valid range: 250mm to 10500mm)
--   **max_distance** (_Optional_, distance, default: 10500mm): Maximum detection distance (valid range: 250mm to 10500mm and has to be greater than min_distance)
+-   **min_distance** (_Optional_, distance, default: 150mm): Minimum detection distance (valid range: 150mm to 10500mm)
+-   **max_distance** (_Optional_, distance, default: 10500mm): Maximum detection distance (valid range: 150mm to 10500mm and has to be greater than min_distance)
 -   **report_cycle** (_Optional_, time, default: 160ms): Sensor reporting cycle (valid range: 50ms to 1000ms). Higher values use less power
 -   **calibrate_on_boot** (_Optional_, boolean, default: false): Whether to perform threshold calibration during boot. Enable this after installation or if the sensor environment changes.
 -   **update_interval** (_Required_, time): How often to poll the sensor and publish state updates. Set it to approximately 15x the report_cycle value, ie at 160ms report_cycle, the sensor provides a new value every 2.4s
@@ -155,3 +155,68 @@ The sensor's power consumption varies based on the reporting cycle:
 -   The component automatically handles the sensor's communication protocol
 -   For best accuracy, ensure the sensor is securely mounted to prevent false readings
 -   After changing any configuration parameters, the sensor will be automatically reconfigured on boot
+
+## Important parts of the docs
+
+Based on the HLK-LD2413 documentation, here are the most important parts about data formatting, protocols, and communication:
+Frame Headers and Footers
+
+Data Frames (device to ESP):
+
+Header: 0xF4 0xF3 0xF2 0xF1
+Footer: 0xF8 0xF7 0xF6 0xF5
+
+Command Frames (ESP to device):
+
+Header: 0xFD 0xFC 0xFB 0xFA
+Footer: 0x04 0x03 0x02 0x01
+
+Protocol Structure
+
+Command Frame Format:
+
+Frame Header (4 bytes)
+Data Length (2 bytes, little-endian)
+Command Word (2 bytes)
+Command Value/Parameters (variable length)
+Frame Footer (4 bytes)
+
+ACK Format (device response to commands):
+
+Frame Header (4 bytes)
+Data Length (2 bytes)
+Original Command Word (2 bytes)
+Command Execution Status (2 bytes, 0 for success, other values for failure)
+Return Value (variable length, if any)
+Frame Footer (4 bytes)
+
+Data Frame Format (distance reporting):
+
+Frame Header (4 bytes)
+Data Length (2 bytes)
+Distance Value (4 bytes, float type in little-endian)
+Frame Footer (4 bytes)
+
+Key Commands
+
+Enter Config Mode (0x00FF): Must be sent before any other command
+Exit Config Mode (0x00FE): Must be sent after configuration
+Set Min Distance (0x0074): Configure minimum detection range
+Set Max Distance (0x0075): Configure maximum detection range
+Update Threshold (0x0072): Calibration command
+Set Report Cycle (0x0071): Configure data reporting frequency
+
+Communication Process
+
+Enter command mode first
+Send configuration commands
+Exit command mode to resume data reporting
+Device will continuously report distance data using the data frame format
+
+Data Handling Notes
+
+The device uses little-endian format for all multi-byte values
+Distance values are sent as 4-byte IEEE 754 floating-point numbers in millimeters
+The device operates at 115200 baud rate, 1 stop bit, no parity
+
+This information is critical for properly parsing the data frames and sending valid commands to the device.
