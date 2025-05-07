@@ -4,7 +4,8 @@ This repository contains custom components for [ESPHome](https://esphome.io/), a
 
 ## Available Components
 
--   [HLK-LD2413](#hlk-ld2413) - 24GHz mmWave radar liquid level detection sensor
+-   [HLK-LD2413](#hlk-ld2413) - 24GHz mmWave radar liquid level sensor
+-   [HLK-LD8001H](#hlk-ld8001h) - 80GHz mmWave radar liquid level sensor
 -   [Notecard](#notecard) - Blues Wireless Notecard IoT modules
 -   [VL53L1X](#vl53l1x) - Time-of-Flight distance sensor
 
@@ -27,9 +28,30 @@ external_components:
 **Resources:**
 
 -   [Documentation](components/hlk_ld2413/README.md)
--   [Datasheet](components/hlk_ld2413/datasheet.txt)
 -   [Example Configuration](example_hlk_ld2413.yaml)
--   Purchase: [AliExpress Option 1](https://www.aliexpress.com/item/1005006766564668.html) / [AliExpress Option 2](https://www.aliexpress.com/item/1005008479449270.html)
+-   Purchase ($20CAD): [AliExpress](https://www.aliexpress.com/item/1005006766564668.html) / [AliExpress 2](https://www.aliexpress.com/item/1005008479449270.html)
+
+## HLK-LD8001H
+
+A high-precision liquid level detection sensor using 80GHz millimeter wave radar technology with a detection range of 0.15m to 40m and accuracy of ±5mm under optimal conditions. This UART component provides MODBUS-RTU integration for this advanced FMCW radar sensor.
+
+The 80GHz technology offers excellent detection capabilities even in challenging environments, making it ideal for water tanks, silos, and other liquid level monitoring applications. The component supports both distance-only mode and water depth calculation when installation height is specified.
+
+There's an optional lens that makes the beam width extremely narrow to ±3 degrees, whereas without the lens it is quite wide as ±25 degrees.
+
+### Installation
+
+```yaml
+external_components:
+    - source: github://Averyy/esphome-custom-components
+      components: [hlk_ld8001h]
+```
+
+**Resources:**
+
+-   [Documentation](components/hlk_ld8001h/README.md)
+-   [Example Configuration](example_hlk_ld8001h.yaml)
+-   Purchase ($50CAD): [AliExpress](https://www.aliexpress.com/item/1005006703020398.html) / [Alibaba](https://www.alibaba.com/product-detail/HLK-LD8001H-80G-liquid-level-detection_1601053500911.html)
 
 ## Blues Notecard
 
@@ -49,7 +71,7 @@ external_components:
 
 -   [Documentation](components/notecard/README.md)
 -   [Example Configuration](example_notecard.yaml)
--   [Purchase: Blues Shop](https://shop.blues.com/collections/notecard)
+-   Purchase ($70CAD): [Blues Shop](https://shop.blues.com/collections/notecard)
 
 ## TOF400C VL53L1X
 
