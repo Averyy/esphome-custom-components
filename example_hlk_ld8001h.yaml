@@ -23,7 +23,6 @@ logger:
 #       pin: GPIO2
 #       id: mosfet_pin
 
-# UART configuration is critical for this component
 uart:
     id: uart_bus
     # tx_pin: GPIO17 # Connect to sensor RX
@@ -32,7 +31,6 @@ uart:
     rx_pin: GPIO3 # Connect to sensor TX
     baud_rate: 115200
 
-# Example 1: With installation_height - reports both distance to water AND water depth
 sensor:
     - platform: hlk_ld8001h
       uart_id: uart_bus
@@ -43,12 +41,13 @@ sensor:
       range: 2.5m # Default 10m, Max detection range (0.15m - 40m), 0.5-1m greater than installation_height
       water_depth_sensor: water_depth_id
 
-    # Water level (device calculates installation height minus direct distance)
+    # Water level
     # This whole section is optional, and only used if you want to report the water depth
-    - platform: template
-      id: water_depth_id
-      name: "Water Depth"
-      unit_of_measurement: "mm"
-      device_class: "distance"
-      state_class: "measurement"
-      accuracy_decimals: 1
+    # It literally just subtracts the distance to water from the installation height, but is included from the sensors docs, so i've included it here
+    # - platform: template
+    #   id: water_depth_id
+    #   name: "Water Depth"
+    #   unit_of_measurement: "mm"
+    #   device_class: "distance"
+    #   state_class: "measurement"
+    #   accuracy_decimals: 1

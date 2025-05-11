@@ -37,7 +37,7 @@ A high-precision liquid level detection sensor using 80GHz millimeter wave radar
 
 The 80GHz technology offers excellent detection capabilities even in challenging environments, making it ideal for water tanks, silos, and other liquid level monitoring applications. The component supports both distance-only mode and water depth calculation when installation height is specified.
 
-There's an optional lens that makes the beam width extremely narrow to ±3 degrees, whereas without the lens it is quite wide as ±25 degrees.
+There's an optional lens that makes the beam width extremely narrow to ±3 degrees, whereas without the lens it is quite wide at ±25 degrees.
 
 ### Installation
 
