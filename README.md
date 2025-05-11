@@ -11,11 +11,9 @@ This repository contains custom components for [ESPHome](https://esphome.io/), a
 
 ## HLK LD2413
 
-A high-precision liquid level detection sensor using 24GHz millimeter wave radar technology with a detection range of 0.15m to 10.5m and accuracy of ±3mm under optimal conditions. The component enforces all datasheet constraints, including detection range (150mm-10500mm) and report cycle timing (50ms-1000ms).
+A budget precision liquid level detection sensor using 24GHz millimeter wave radar technology with a detection range of 0.15m to 10.5m and accuracy of ±3mm under optimal conditions. The component enforces all datasheet constraints, including detection range (150mm-10500mm) and report cycle timing (50ms-1000ms).
 
-This UART component provides support for this advanced mmWave distance sensing product. I developed it specifically for measuring water levels in an underground cistern where traditional ultrasonic sensors struggled with winter temperature variations, darkness, and humidity. The mmWave technology offers superior reliability in challenging environments.
-
-Note that LD2413 is very picky about surroundings and reflections. Enclosures or electronics too close to it can cause it to not provide any readings (or provide inaccurate ones). Always test it solo first to help narrow down any issues.
+The LD2413 is very picky about surroundings and reflections. Enclosures or electronics too close to it can cause it to not provide any readings (or provide wildy inaccurate ones). Always test it solo first to help narrow down any issues.
 
 ### Installation
 
@@ -33,11 +31,11 @@ external_components:
 
 ## HLK-LD8001H
 
-A high-precision liquid level detection sensor using 80GHz millimeter wave radar technology with a detection range of 0.15m to 40m and accuracy of ±5mm under optimal conditions. This UART component provides MODBUS-RTU integration for this advanced FMCW radar sensor.
+A high-end precision liquid level detection sensor using 80GHz millimeter wave radar technology with a detection range of 0.15m to 40m and accuracy of ±5mm under optimal conditions. This UART component supports both distance-only mode and water depth calculation when installation height is specified.
 
-The 80GHz technology offers excellent detection capabilities even in challenging environments, making it ideal for water tanks, silos, and other liquid level monitoring applications. The component supports both distance-only mode and water depth calculation when installation height is specified.
+The 80GHz technology offers excellent detection capabilities even in challenging environments, making it ideal for water tanks, silos, and other liquid level monitoring applications. It is not picky about enclosures and works fine with a 3D printed case or electronics nearby.
 
-There's an optional lens that makes the beam width extremely narrow to ±3 degrees, whereas without the lens it is quite wide at ±25 degrees.
+There's an optional lens that narrows the beamwidth to ±3 degrees, whereas without the lens and just the bare sensor it is quite wide at ±25 degrees.
 
 ### Installation
 
@@ -57,7 +55,7 @@ external_components:
 
 Integration with Blues Wireless Notecard (both cellular and WiFi variants) for IoT connectivity. Features include configurable data collection and sync intervals, automatic data batching, and access to Notecard temperature and battery voltage.
 
-This UART component was developed to transmit magnetic dial gauge readings from a propane tank in a location without WiFi access. The implementation focuses specifically on using the Notecard for data transmission to Notehub, while the ESP32 handles sleep cycles and data filtering for optimal power efficiency.
+The implementation focuses specifically on using the Notecard for data transmission to Notehub, while the ESP32 handles sleep cycles and data filtering for optimal power efficiency.
 
 ### Installation
 

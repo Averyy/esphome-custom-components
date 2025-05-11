@@ -25,11 +25,13 @@ logger:
 
 uart:
     id: uart_bus
+    baud_rate: 115200
+    # ESP32 Dev Board:
     # tx_pin: GPIO17 # Connect to sensor RX
     # rx_pin: GPIO16 # Connect to sensor TX
+    # ESP32 C3 Mini:
     tx_pin: GPIO1 # Connect to sensor RX
     rx_pin: GPIO3 # Connect to sensor TX
-    baud_rate: 115200
 
 sensor:
     - platform: hlk_ld8001h
@@ -37,17 +39,18 @@ sensor:
       name: "Distance to Water"
       unit_of_measurement: "mm"
       update_interval: 3s
-      #   installation_height: 2m # Distance from sensor to water empty level / tank bottom (0.15m - 40m)
-      range: 2.5m # Default 10m, Max detection range (0.15m - 40m), 0.5-1m greater than installation_height
-      water_depth_sensor: water_depth_id
+      range: 2.5m # Max detection range. Default 10m (0.15m - 40m), 0.5-1m greater than expected max distance to water
 
-    # Water level
-    # This whole section is optional, and only used if you want to report the water depth
-    # It literally just subtracts the distance to water from the installation height, but is included from the sensors docs, so i've included it here
-    # - platform: template
-    #   id: water_depth_id
-    #   name: "Water Depth"
-    #   unit_of_measurement: "mm"
-    #   device_class: "distance"
-    #   state_class: "measurement"
-    #   accuracy_decimals: 1
+
+      # Uncomment this if you want to report the water depth level:
+      # installation_height: 2m # Distance from sensor to water empty level / tank bottom (0.15m - 40m)
+      # water_depth_sensor: water_depth_id
+
+      # This whole section is optional, and only used if you want to report the water depth to HA without having to any additional calculations. It literally just subtracts the distance to water from the installation height
+      # - platform: template
+      #   id: water_depth_id
+      #   name: "Water Depth"
+      #   unit_of_measurement: "mm"
+      #   device_class: "distance"
+      #   state_class: "measurement"
+      #   accuracy_decimals: 1
